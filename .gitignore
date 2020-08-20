@@ -1,0 +1,4 @@
+*.pdf
+.ipynb_checkpoints
+__pycache__
+nbs/eu_parliament
