@@ -2,11 +2,11 @@
 
 Ever wondered if you could visualise the voting behavior of MEPs in the EU Plenary yourself somehow? Wonder no longer! With this repo this is now a thing, well perhaps ... mostly I think ... 
 
-Currently this repo is using PyPDF2 to parse PDFs behind [_Result of roll call votes available_|https://www.europarl.europa.eu/plenary/en/votes.html?tab=votes]. And the notebook already contains a dazzling Plotly visulisation!
+Currently this repo is using PyPDF2 to parse PDFs behind [_Result of roll call votes available](https://www.europarl.europa.eu/plenary/en/votes.html?tab=votes). And the notebook already contains a dazzling Plotly visulisation!
 
 ## Why?
 
-After watching Nico Semsrott's video on [Silent Minutes, Missing Votes, Shocking Colleagues|https://www.youtube.com/watch?v=Chg4Vublbgk&t=408s], where he enthusiastically presented a typical call vote PDF, I got demotivated enough to try and ask my PC for help. 
+After watching Nico Semsrott's video on [Silent Minutes, Missing Votes, Shocking Colleagues](https://www.youtube.com/watch?v=Chg4Vublbgk), where he enthusiastically presented a typical call vote PDF, I got demotivated enough to try and ask my PC for help. 
 
 ## State of this
 
