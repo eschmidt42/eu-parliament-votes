@@ -2,13 +2,19 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"get_ix": "01_parsing_roll_call_votes.ipynb",
+index = {"URL": "00_downloading_pdfs.ipynb",
+         "PDF_PATH": "00_downloading_pdfs.ipynb",
+         "identify_links_for_pdfs": "00_downloading_pdfs.ipynb",
+         "download_file": "00_downloading_pdfs.ipynb",
+         "collect_multiple_files": "00_downloading_pdfs.ipynb",
+         "get_ix": "01_parsing_roll_call_votes.ipynb",
          "useful_string": "01_parsing_roll_call_votes.ipynb",
          "SummaryParser": "01_parsing_roll_call_votes.ipynb",
          "VotesParser": "01_parsing_roll_call_votes.ipynb",
          "get_all_issues": "01_parsing_roll_call_votes.ipynb"}
 
-modules = ["parse.py"]
+modules = ["download.py",
+           "parse.py"]
 
 doc_url = "https://eschmidt42.github.io/eu_parliament/"
 
