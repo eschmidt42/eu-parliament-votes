@@ -1,0 +1,8 @@
+{
+  "eu_parliament": {
+    "Overview": "/",
+    "Downloading PDFs for Roll Call votes": "downloading_pdfs.html",
+    "Parsing a roll call pdf": "parsing_roll_call_votes.html",
+    "Basic Analysis": "basic_analysis.html"
+  }
+}

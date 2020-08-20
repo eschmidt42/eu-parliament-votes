@@ -1,8 +1,6 @@
 # Making sense of EU Parliament Plenary roll call vote PDFs
+> Ever wondered if you could visualise the voting behavior of MEPs in the EU Plenary yourself somehow? Wonder no longer! With this repo this is now a thing, well perhaps ... mostly I think ... 
 
-Ever wondered if you could visualise the voting behavior of MEPs in the EU Plenary yourself somehow? Wonder no longer! With this repo this is now a thing, well perhaps ... mostly I think ... 
-
-Currently this repo is using PyPDF2 to parse PDFs behind [_Result of roll call votes available](https://www.europarl.europa.eu/plenary/en/votes.html?tab=votes). And the notebook already contains a dazzling Plotly visulisation!
 
 ## Why?
 
