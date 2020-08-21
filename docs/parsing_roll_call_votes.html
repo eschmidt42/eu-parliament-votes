@@ -5,8 +5,8 @@ title: Parsing a roll call pdf
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "Extracting the relevant information from a roll call vote PDF file."
-description: "Extracting the relevant information from a roll call vote PDF file."
+summary: "Extracting voting information from roll call vote PDF files (those with RCV in their file name), which were downloaded via `eu_parliament.download`."
+description: "Extracting voting information from roll call vote PDF files (those with RCV in their file name), which were downloaded via `eu_parliament.download`."
 nb_path: "nbs/01_parsing_roll_call_votes.ipynb"
 ---
 <!--
@@ -30,21 +30,40 @@ nb_path: "nbs/01_parsing_roll_call_votes.ipynb"
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>PyPDF2 docs: <a href="https://pythonhosted.org/PyPDF2/PdfFileReader.html">https://pythonhosted.org/PyPDF2/PdfFileReader.html</a></p>
-<p>PyPDF2 <code>PageObject</code>: <a href="https://pythonhosted.org/PyPDF2/PageObject.html#PyPDF2.pdf.PageObject">https://pythonhosted.org/PyPDF2/PageObject.html#PyPDF2.pdf.PageObject</a></p>
-<p>EU pdfs: <a href="https://www.europarl.europa.eu/plenary/en/votes.html?tab=votes">https://www.europarl.europa.eu/plenary/en/votes.html?tab=votes</a></p>
+<p><strong>Some useful references:</strong></p>
+<ul>
+<li>PyPDF2 docs: <a href="https://pythonhosted.org/PyPDF2/PdfFileReader.html">https://pythonhosted.org/PyPDF2/PdfFileReader.html</a><ul>
+<li><code>PageObject</code>: <a href="https://pythonhosted.org/PyPDF2/PageObject.html#PyPDF2.pdf.PageObject">https://pythonhosted.org/PyPDF2/PageObject.html#PyPDF2.pdf.PageObject</a></li>
+</ul>
+</li>
+</ul>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>PDF content:</p>
+<p><strong>Content of RCV pdfs:</strong></p>
 <ul>
 <li>intro</li>
 <li>table of contents</li>
-<li>votes for issue:<ul>
-<li>each issue ma also have vote corrections</li>
+<li>votes by issue (split by outcome +/-/0, i.e. yes/no/abstain and party):<ul>
+<li>every MEP is represented by the surname</li>
+<li>each issue may also have vote corrections (only MEP and no party info and for some reasonthe MEPs's names here include their forename) </li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>TODO:</strong></p>
+<ul>
+<li>Some MEP names seem to disappear when reading the PDF, like Kolakušić, and some are incorrectly read like Ždanoka $\rightarrow$ ”danoka $\rightarrow$ fix in <a href="/eu_parliament/parsing_roll_call_votes.html#SummaryParser"><code>SummaryParser</code></a> / <a href="/eu_parliament/parsing_roll_call_votes.html#VotesParser"><code>VotesParser</code></a> or PyPDF2<ul>
+<li>consequence: the total vote count and the counted names of the actually parsed MEPs disagrees</li>
+<li>tried <code>pdfminer</code>, which initially looked promising (it's not dropping words as far as I can see) but actually copies and pasts bits of texts all over the place</li>
 </ul>
 </li>
 </ul>
@@ -59,17 +78,62 @@ nb_path: "nbs/01_parsing_roll_call_votes.ipynb"
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Listing available PDFs</p>
+
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;PV-9-2020-07-23-RCV_FR.pdf&#39;</span><span class="p">);</span> <span class="n">path</span>
-</pre></div>
+</div>
+    {% endraw %}
 
-    </div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="extract_date_from_filename" class="doc_header"><code>extract_date_from_filename</code><a href="https://github.com/eschmidt42/eu_parliament/tree/master/eu_parliament/parse.py#L20" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>extract_date_from_filename</code>(<strong><code>file</code></strong>)</p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="list_available_pdfs" class="doc_header"><code>list_available_pdfs</code><a href="https://github.com/eschmidt42/eu_parliament/tree/master/eu_parliament/parse.py#L22" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>list_available_pdfs</code>(<strong><code>file_dir</code></strong>:<code>Union</code>[<code>str</code>, <code>Path</code>]=<em><code>Path('../pdfs')</code></em>, <strong><code>filter_fun</code></strong>:<code>Callable</code>=<em><code>&lt;lambda&gt;</code></em>)</p>
+</blockquote>
+
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -83,10 +147,75 @@ nb_path: "nbs/01_parsing_roll_call_votes.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;PV-9-2020-07-08-RCV_EN.pdf&#39;</span><span class="p">);</span> <span class="n">path</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">rcv_pdfs</span> <span class="o">=</span> <span class="n">list_available_pdfs</span><span class="p">();</span> <span class="n">rcv_pdfs</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>file</th>
+      <th>timestamp</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>../pdfs/PV-9-2020-04-16-RCV_EN.pdf</td>
+      <td>2020-04-16</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>../pdfs/PV-9-2020-04-17-RCV_EN.pdf</td>
+      <td>2020-04-17</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>../pdfs/PV-9-2020-05-13-RCV_EN.pdf</td>
+      <td>2020-05-13</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>../pdfs/PV-9-2020-05-14-RCV_EN.pdf</td>
+      <td>2020-05-14</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>../pdfs/PV-9-2020-05-15-RCV_EN.pdf</td>
+      <td>2020-05-15</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -100,10 +229,26 @@ nb_path: "nbs/01_parsing_roll_call_votes.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">fobj</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="n">rcv_pdfs</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">];</span> <span class="n">path</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>PosixPath(&#39;../pdfs/PV-9-2020-04-16-RCV_EN.pdf&#39;)</pre>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -113,16 +258,6 @@ nb_path: "nbs/01_parsing_roll_call_votes.ipynb"
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">reader</span> <span class="o">=</span> <span class="n">pdf</span><span class="o">.</span><span class="n">PdfFileReader</span><span class="p">(</span><span class="n">fobj</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 </div>
     {% endraw %}
@@ -130,32 +265,22 @@ nb_path: "nbs/01_parsing_roll_call_votes.ipynb"
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">reader</span><span class="o">.</span><span class="n">getNumPages</span><span class="p">()</span>
-</pre></div>
+<div class="output_wrapper">
+<div class="output">
 
-    </div>
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="Pdf2Text" class="doc_header"><code>class</code> <code>Pdf2Text</code><a href="https://github.com/eschmidt42/eu_parliament/tree/master/eu_parliament/parse.py#L31" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Pdf2Text</code>()</p>
+</blockquote>
+<p>Parsing a PDF to a list of strings</p>
+
 </div>
-</div>
 
 </div>
-    {% endraw %}
 
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
-<span class="n">all_texts</span> <span class="o">=</span> <span class="p">[</span><span class="n">reader</span><span class="o">.</span><span class="n">getPage</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">extractText</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">reader</span><span class="o">.</span><span class="n">getNumPages</span><span class="p">())]</span>
-</pre></div>
-
-    </div>
 </div>
 </div>
 
@@ -164,10 +289,306 @@ nb_path: "nbs/01_parsing_roll_call_votes.ipynb"
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>Using <code>pdfminer</code> to parse the PDF</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<span class="n">all_texts</span> <span class="o">=</span> <span class="n">Pdf2Text</span><span class="p">()(</span><span class="n">path</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;pdfminer&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>CPU times: user 16.5 s, sys: 46.9 ms, total: 16.5 s
+Wall time: 16.5 s
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Using <code>PyPDF2</code> to parse the PDF</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<span class="n">all_texts2</span> <span class="o">=</span> <span class="n">Pdf2Text</span><span class="p">()(</span><span class="n">path</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;pypdf2&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>CPU times: user 3.78 s, sys: 15.6 ms, total: 3.8 s
+Wall time: 3.79 s
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">all_texts</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Протокол
+Резултати от поименно гласуване - Приложение
+Acta
+Resultados de la votación nominal - Anexo
+Zápis
+Výsledek jmenovitého hlasování - Příloha
+Protokol
+Resultat af afstemningerne ved navneopråb - Bilag
+Protokoll
+Ergebnis der namentlichen Abstimmungen - Anlage
+Protokoll
+Nimeliste hääletuste tulemused - Lisa
+Συvoπτικά πρακτικά
+Απoτελέσματα τωv ψηφoφoριώv με ovoμαστική κλήση - Παράρτημα
+Minutes of proceedings
+Result of roll-call votes - Annex
+Procès-Verbal
+Résultat des votes par appel nominal - Annexe
+Zapisnik
+Rezultati poimeničnog glasovanja – Prilog
+Processo Verbale
+Risultato delle votazioni per appello nominale - Allegato
+Protokols
+Rezultāti balsošanai pēc saraksta - pielikums
+Protokolas
+Vardinio balsavimo rezultatai - priedas
+Jegyzőkönyv
+Név szerinti szavazás eredménye - melléklet
+Minuti tas-seduta
+Riżultat tal-votazzjoni b&#39;sejħa tal-ismijiet - Anness
+Notulen
+Uitslag van de hoofdelijke stemmingen - Bijlage
+Protokół
+Wyniki głosowań imiennych - Załącznik
+Ata
+Resultado da votação nominal - Anexo
+Proces-verbal
+Rezultatul votului prin apel nominal - Anexă
+Zápisnica
+Výsledok hlasovania podľa mien - Príloha
+Zapisnik
+Izid poimenskega glasovanja - Priloga
+Pöytäkirja
+Nimenhuutoäänestysten tulokset - Liite
+Protokoll
+Resultat av omröstningarna med namnupprop – Bilaga
+
+16/04/2020
+
+P9_PV(2020)04-16(RCV)_EN.docx
+
+1
+
+PE 650.989
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">all_texts2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>P9_PV(2020)04-16(RCV)_EN.docx
+1
+PE 650.989
+
+
+ 
+
+ 
+
+ 
+
+ - 
+
+Acta
+Resultados de la votación nominal - Anexo
+Zápis
+Výsledek jmenovitého hlasování - 
+
+Protokol
+Resultat af afstemningerne ved navneopråb - Bilag
+Protokoll
+Ergebnis der namentlichen Abstimmungen - Anlage
+Protokoll
+Nimeliste hääletuste tulemused - Lisa
+
+ 
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ - 
+
+Minutes of proceedings
+Result of roll-call votes - Annex
+Procès-Verbal
+Résultat des votes par appel nominal - Annexe
+Zapisnik
+Rezultati 
+
+ glasovanja Œ Prilog
+Processo Verbale
+Risultato delle votazioni per appello nominale - Allegato
+Protokols
+
+ balsoıanai 
+
+ saraksta - pielikums
+Protokolas
+Vardinio balsavimo rezultatai - priedas
+
+Név szerinti szavazás eredménye - melléklet
+Minuti tas-seduta
+
+ tal-votazzjoni 
+
+ tal-ismijiet - Anness
+Notulen
+Uitslag van de hoofdelijke stemmingen - Bijlage
+
+Wyniki 
+
+ imiennych - 
+
+Ata
+Resultado da votação nominal - Anexo
+Proces-verbal
+Rezultatul votului prin apel nominal - 
+
+Zápisnica
+Výsledok hlasovania 
+
+ mien - Príloha
+Zapisnik
+Izid poimenskega glasovanja - Priloga
+Pöytäkirja
+Nimenhuutoäänestysten tulokset - Liite
+Protokoll
+Resultat av omröstningarna med namnupprop Œ Bilaga
+16/04/2020
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Comparing the extracted texts we see that PyPDF2 seems to drop some words whereas pdfminer does not seem to do so.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Parsing-the-summary">Parsing the summary<a class="anchor-link" href="#Parsing-the-summary"> </a></h2>
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Defining two utility functions to make our lifes easier</p>
+
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -186,7 +607,7 @@ nb_path: "nbs/01_parsing_roll_call_votes.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_ix" class="doc_header"><code>get_ix</code><a href="https://github.com/eschmidt42/eu_parliament/tree/master/eu_parliament/parse.py#L16" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_ix</code>(<strong><code>strings</code></strong>:<code>List</code>[<code>str</code>], <strong><code>pattern_fun</code></strong>:<code>Callable</code>)</p>
+<h4 id="get_ix" class="doc_header"><code>get_ix</code><a href="https://github.com/eschmidt42/eu_parliament/tree/master/eu_parliament/parse.py#L62" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_ix</code>(<strong><code>strings</code></strong>:<code>List</code>[<code>str</code>], <strong><code>pattern_fun</code></strong>:<code>Callable</code>)</p>
 </blockquote>
 
 </div>
@@ -210,7 +631,7 @@ nb_path: "nbs/01_parsing_roll_call_votes.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="useful_string" class="doc_header"><code>useful_string</code><a href="https://github.com/eschmidt42/eu_parliament/tree/master/eu_parliament/parse.py#L20" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>useful_string</code>(<strong><code>s</code></strong>)</p>
+<h4 id="useful_string" class="doc_header"><code>useful_string</code><a href="https://github.com/eschmidt42/eu_parliament/tree/master/eu_parliament/parse.py#L65" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>useful_string</code>(<strong><code>s</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -241,8 +662,9 @@ nb_path: "nbs/01_parsing_roll_call_votes.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="SummaryParser" class="doc_header"><code>class</code> <code>SummaryParser</code><a href="https://github.com/eschmidt42/eu_parliament/tree/master/eu_parliament/parse.py#L24" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>SummaryParser</code>(<strong><code>all_texts</code></strong>:<code>List</code>[<code>str</code>])</p>
+<h2 id="SummaryParser" class="doc_header"><code>class</code> <code>SummaryParser</code><a href="https://github.com/eschmidt42/eu_parliament/tree/master/eu_parliament/parse.py#L69" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>SummaryParser</code>(<strong><code>all_texts</code></strong>:<code>List</code>[<code>str</code>], <strong><code>method</code></strong>:<code>str</code>)</p>
 </blockquote>
+<p>Parsing the summary of the issues voted on and documented in an RCV file</p>
 
 </div>
 
@@ -261,12 +683,283 @@ nb_path: "nbs/01_parsing_roll_call_votes.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">summary</span> <span class="o">=</span> <span class="n">SummaryParser</span><span class="p">(</span><span class="n">all_texts</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">all_texts</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&#39;\n\n\x0cSOMMAIRE\n\n1.\nRequest for urgent procedure: Regulation amending the Multiannual financial framework \n2014-2020 (2020/0055(APP))............................................................................................................7\n\n2.\nRequest for urgent procedure: Draft amending budget No 1/2020: Assistance to Greece in \nresponse to increased migration pressure - Immediate measures in the context of the COVID-19 \noutbreak - Support to post-earthquake reconstruction in Albania - Other adjustments \n(2020/2052(BUD)) .............................................................................................................................9\n\nRequest for urgent procedure: Draft amending budget No 2/2020: Providing emergency \n\n3.\nsupport to Member States and further reinforcement of the Union Civil Protection \nMechanism/rescEU to respond to the COVID-19 outbreak - C9-0109/2020 (2020/2055(BUD)).....11\n\nRequest for urgent procedure: Mobilisation of the Flexibility Instrument for 2020: immediate \n\n4.\nmeasures in the context of the COVID-19 outbreak; reinforcement of the European Public \nProsecutor’s Office (COM(2020)0140 - C9-0092/2020 - 2020/2053(BUD)) ....................................13\n\n5. Mobilisation of the Flexibility Instrument for 2020: immediate measures in the context of the \nCOVID-19 outbreak (COM(2020)0171 - C9-0096/2020 - 2020/2056(BUD))...................................15\n\nRequest for urgent procedure: Mobilisation of the Contingency Margin in 2020: providing \n\n6.\nemergency assistance to Member States and further reinforcing the Union Civil Protection \nMechanism/rescEU in response to the COVID-19 outbreak - C9-0097/2020 (2020/2057(BUD)) ...17\n\nRequest for urgent procedure: Specific measures to provide exceptional flexibility for the use \n\n7.\nof the European Structural and Investments Funds in response to the COVID-19 outbreak - C9-\n0095/2020 (2020/0054(COD)) .........................................................................................................19\n\n8.\nRequest for urgent procedure: Introduction of specific measures for addressing the COVID-19 \ncrisis - C9-0094/2020 (2020/0058(COD))........................................................................................21\n\n9.\nRequest for urgent procedure: Specific measures to mitigate the impact of the COVID-19 \noutbreak in the fishery and aquaculture sector - C9-0093/2020 (2020/0059(COD)) .......................23\n\n10. Request for urgent procedure: Medical devices - C9-0098/2020 (2020/0060(COD)) .............25\n\n11. RC-B9-0143/2020 - am 2 ........................................................................................................27\n\n12. RC-B9-0143/2020 - am 55 ......................................................................................................31\n\n13. RC-B9-0143/2020 - am 43 ......................................................................................................35\n\n14. RC-B9-0143/2020 - am 56 ......................................................................................................39\n\n15. RC-B9-0143/2020 - am 57 ......................................................................................................43\n\n16. RC-B9-0143/2020 - am 44 ......................................................................................................47\n\n17. RC-B9-0143/2020 - am 29 ......................................................................................................51\n\n18. RC-B9-0143/2020 - am 80 ......................................................................................................55\n\n19. RC-B9-0143/2020 - am 58 ......................................................................................................59\n\n20. RC-B9-0143/2020 - am 13 ......................................................................................................63\n\n21. RC-B9-0143/2020 - am 49 ......................................................................................................67\n\n22. RC-B9-0143/2020 - am 59 ......................................................................................................71\n\n23. RC-B9-0143/2020 - am 60 ......................................................................................................75\n\n24. RC-B9-0143/2020 - am 15 ......................................................................................................79\n\n25. RC-B9-0143/2020 - § 17/1 ......................................................................................................83\n\n26. RC-B9-0143/2020 - § 17/2 ......................................................................................................87\n\nP9_PV(2020)04-16(RCV)_EN.docx\n\n3\n\nPE 650.989&#39;</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">all_texts2</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&#39;P9_PV(2020)04-16(RCV)_EN.docx\n3\nPE 650.989\nSOMMAIRE\n1.Request for urgent procedure: Regulation amending the Multiannual financial framework \n2014-2020 (2020/0055(APP))............................................................................................................7\n2.Request for urgent procedure: Draft amending budget No 1/2020: Assistance to Greece in \nresponse to increased migration pressure - Immediate measures in the context of the COVID-19 \noutbreak - Support to post-earthquake reconstruction in Albania - Other adjustments \n(2020/2052(BUD)).............................................................................................................................9\n3.Request for urgent procedure: Draft amending budget No 2/2020: Providing emergency \nsupport to Member States and further reinforcement of the Union Civil Protection \nMechanism/rescEU to respond to the COVID-19 outbreak - C9-0109/2020 (2020/2055(BUD)).....11\n4.Request for urgent procedure: Mobilisation of the Flexibility Instrument for 2020: immediate \nmeasures in the context of the COVID-19 outbreak; reinforcement of the European Public \nProsecutor™s Office (COM(2020)0140 - C9-0092/2020 - 2020/2053(BUD))....................................13\n5.Mobilisation of the Flexibility Instrument for 2020: immediate measures in the context of the \nCOVID-19 outbreak (COM(2020)0171 - C9-0096/2020 - 2020/2056(BUD))...................................15\n6.Request for urgent procedure: Mobilisation of the Contingency Margin in 2020: providing \nemergency assistance to Member States and further reinforcing the Union Civil Protection \nMechanism/rescEU in response to the COVID-19 outbreak - C9-0097/2020 (2020/2057(BUD))...17\n7.Request for urgent procedure: Specific measures to provide exceptional flexibility for the use \nof the European Structural and Investments Funds in response to the COVID-19 outbreak - C9-\n0095/2020 (2020/0054(COD)).........................................................................................................19\n8.Request for urgent procedure: Introduction of specific measures for addressing the COVID-19 \ncrisis - C9-0094/2020 (2020/0058(COD))........................................................................................21\n9.Request for urgent procedure: Specific measures to mitigate the impact of the COVID-19 \noutbreak in the fishery and aquaculture sector - C9-0093/2020 (2020/0059(COD)).......................23\n10.Request for urgent procedure: Medical devices - C9-0098/2020 (2020/0060(COD)).............25\n11.RC-B9-0143/2020 - am 2........................................................................................................27\n12.RC-B9-0143/2020 - am 55......................................................................................................31\n13.RC-B9-0143/2020 - am 43......................................................................................................35\n14.RC-B9-0143/2020 - am 56......................................................................................................39\n15.RC-B9-0143/2020 - am 57......................................................................................................43\n16.RC-B9-0143/2020 - am 44......................................................................................................47\n17.RC-B9-0143/2020 - am 29......................................................................................................51\n18.RC-B9-0143/2020 - am 80......................................................................................................55\n19.RC-B9-0143/2020 - am 58......................................................................................................59\n20.RC-B9-0143/2020 - am 13......................................................................................................63\n21.RC-B9-0143/2020 - am 49......................................................................................................67\n22.RC-B9-0143/2020 - am 59......................................................................................................71\n23.RC-B9-0143/2020 - am 60......................................................................................................75\n24.RC-B9-0143/2020 - am 15......................................................................................................79\n25.RC-B9-0143/2020 - § 17/1......................................................................................................83\n26.RC-B9-0143/2020 - § 17/2......................................................................................................87\n&#39;</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">summary</span> <span class="o">=</span> <span class="n">SummaryParser</span><span class="p">(</span><span class="n">all_texts</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;pdfminer&#39;</span><span class="p">)</span>
 <span class="n">df_summary</span> <span class="o">=</span> <span class="n">summary</span><span class="o">.</span><span class="n">df</span>
 <span class="n">df_summary</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[&#39;Request for urgent procedure: Draft amending budget No 2/2020: Providing emergency \n\n3.\nsupport to Member States and further reinforcement of the Union Civil Protection \nMechanism/rescEU to respond to the COVID-19 outbreak - C9-0109/2020 (2020/2055(BUD)).....11&#39;, &#39;Request for urgent procedure: Mobilisation of the Flexibility Instrument for 2020: immediate \n\n4.\nmeasures in the context of the COVID-19 outbreak; reinforcement of the European Public \nProsecutor’s Office (COM(2020)0140 - C9-0092/2020 - 2020/2053(BUD)) ....................................13&#39;, &#39;Request for urgent procedure: Mobilisation of the Contingency Margin in 2020: providing \n\n6.\nemergency assistance to Member States and further reinforcing the Union Civil Protection \nMechanism/rescEU in response to the COVID-19 outbreak - C9-0097/2020 (2020/2057(BUD)) ...17&#39;, &#39;Request for urgent procedure: Specific measures to provide exceptional flexibility for the use \n\n7.\nof the European Structural and Investments Funds in response to the COVID-19 outbreak - C9-\n0095/2020 (2020/0054(COD)) .........................................................................................................19&#39;]
+[&#39;\n\n\x0cSOMMAIRE\n\n1.\nRequest for urgent procedure: Regulation amending the Multiannual financial framework \n2014-2020 (2020/0055(APP))............................................................................................................7&#39;, &#39;2.\nRequest for urgent procedure: Draft amending budget No 1/2020: Assistance to Greece in \nresponse to increased migration pressure - Immediate measures in the context of the COVID-19 \noutbreak - Support to post-earthquake reconstruction in Albania - Other adjustments \n(2020/2052(BUD)) .............................................................................................................................9&#39;, &#39;3.\nRequest for urgent procedure: Draft amending budget No 2/2020: Providing emergency  support to Member States and further reinforcement of the Union Civil Protection \nMechanism/rescEU to respond to the COVID-19 outbreak - C9-0109/2020 (2020/2055(BUD)).....11&#39;, &#39;4.\nRequest for urgent procedure: Mobilisation of the Flexibility Instrument for 2020: immediate  measures in the context of the COVID-19 outbreak; reinforcement of the European Public \nProsecutor’s Office (COM(2020)0140 - C9-0092/2020 - 2020/2053(BUD)) ....................................13&#39;, &#39;5. Mobilisation of the Flexibility Instrument for 2020: immediate measures in the context of the \nCOVID-19 outbreak (COM(2020)0171 - C9-0096/2020 - 2020/2056(BUD))...................................15&#39;, &#39;6.\nRequest for urgent procedure: Mobilisation of the Contingency Margin in 2020: providing  emergency assistance to Member States and further reinforcing the Union Civil Protection \nMechanism/rescEU in response to the COVID-19 outbreak - C9-0097/2020 (2020/2057(BUD)) ...17&#39;, &#39;7.\nRequest for urgent procedure: Specific measures to provide exceptional flexibility for the use  of the European Structural and Investments Funds in response to the COVID-19 outbreak - C9-\n0095/2020 (2020/0054(COD)) .........................................................................................................19&#39;, &#39;8.\nRequest for urgent procedure: Introduction of specific measures for addressing the COVID-19 \ncrisis - C9-0094/2020 (2020/0058(COD))........................................................................................21&#39;, &#39;9.\nRequest for urgent procedure: Specific measures to mitigate the impact of the COVID-19 \noutbreak in the fishery and aquaculture sector - C9-0093/2020 (2020/0059(COD)) .......................23&#39;, &#39;10. Request for urgent procedure: Medical devices - C9-0098/2020 (2020/0060(COD)) .............25&#39;, &#39;11. RC-B9-0143/2020 - am 2 ........................................................................................................27&#39;, &#39;12. RC-B9-0143/2020 - am 55 ......................................................................................................31&#39;, &#39;13. RC-B9-0143/2020 - am 43 ......................................................................................................35&#39;, &#39;14. RC-B9-0143/2020 - am 56 ......................................................................................................39&#39;, &#39;15. RC-B9-0143/2020 - am 57 ......................................................................................................43&#39;, &#39;16. RC-B9-0143/2020 - am 44 ......................................................................................................47&#39;, &#39;17. RC-B9-0143/2020 - am 29 ......................................................................................................51&#39;, &#39;18. RC-B9-0143/2020 - am 80 ......................................................................................................55&#39;, &#39;19. RC-B9-0143/2020 - am 58 ......................................................................................................59&#39;, &#39;20. RC-B9-0143/2020 - am 13 ......................................................................................................63&#39;, &#39;21. RC-B9-0143/2020 - am 49 ......................................................................................................67&#39;, &#39;22. RC-B9-0143/2020 - am 59 ......................................................................................................71&#39;, &#39;23. RC-B9-0143/2020 - am 60 ......................................................................................................75&#39;, &#39;24. RC-B9-0143/2020 - am 15 ......................................................................................................79&#39;, &#39;25. RC-B9-0143/2020 - § 17/1 ......................................................................................................83&#39;, &#39;26. RC-B9-0143/2020 - § 17/2 ......................................................................................................87&#39;]
+3.
+Request for urgent procedure: Draft amending budget No 2/2020: Providing emergency  support to Member States and further reinforcement of the Union Civil Protection 
+Mechanism/rescEU to respond to the COVID-19 outbreak - C9-0109/2020 (2020/2055(BUD)).....11
+5. Mobilisation of the Flexibility Instrument for 2020: immediate measures in the context of the 
+COVID-19 outbreak (COM(2020)0171 - C9-0096/2020 - 2020/2056(BUD))...................................15
+7.
+Request for urgent procedure: Specific measures to provide exceptional flexibility for the use  of the European Structural and Investments Funds in response to the COVID-19 outbreak - C9-
+0095/2020 (2020/0054(COD)) .........................................................................................................19
+9.
+Request for urgent procedure: Specific measures to mitigate the impact of the COVID-19 
+outbreak in the fishery and aquaculture sector - C9-0093/2020 (2020/0059(COD)) .......................23
+11. RC-B9-0143/2020 - am 2 ........................................................................................................27
+13. RC-B9-0143/2020 - am 43 ......................................................................................................35
+15. RC-B9-0143/2020 - am 57 ......................................................................................................43
+17. RC-B9-0143/2020 - am 29 ......................................................................................................51
+19. RC-B9-0143/2020 - am 58 ......................................................................................................59
+21. RC-B9-0143/2020 - am 49 ......................................................................................................67
+23. RC-B9-0143/2020 - am 60 ......................................................................................................75
+25. RC-B9-0143/2020 - § 17/1 ......................................................................................................83
+[&#39;Request for urgent procedure: Draft amending budget No 2/2020: Providing emergency \n\n3.\nsupport to Member States and further reinforcement of the Union Civil Protection \nMechanism/rescEU to respond to the COVID-19 outbreak - C9-0109/2020 (2020/2055(BUD)).....11&#39;, &#39;Request for urgent procedure: Mobilisation of the Flexibility Instrument for 2020: immediate \n\n4.\nmeasures in the context of the COVID-19 outbreak; reinforcement of the European Public \nProsecutor’s Office (COM(2020)0140 - C9-0092/2020 - 2020/2053(BUD)) ....................................13&#39;, &#39;Request for urgent procedure: Mobilisation of the Contingency Margin in 2020: providing \n\n6.\nemergency assistance to Member States and further reinforcing the Union Civil Protection \nMechanism/rescEU in response to the COVID-19 outbreak - C9-0097/2020 (2020/2057(BUD)) ...17&#39;, &#39;Request for urgent procedure: Specific measures to provide exceptional flexibility for the use \n\n7.\nof the European Structural and Investments Funds in response to the COVID-19 outbreak - C9-\n0095/2020 (2020/0054(COD)) .........................................................................................................19&#39;, &#39;ECR:\n\nID:\n\nNI:\n\nPPE:\n\nRenew:\n\nS&amp;D:\n\n1.\nframework 2014-2020 (2020/0055(APP))\n\nRequest for urgent procedure: Regulation amending the Multiannual financial \n\n16/04/2020 09:30:00.010&#39;, &#39;ID:\n\nNI:\n\nKolakušić\n\nID:\n\nMadison\n\n-\n\n0&#39;, &#39;ECR:\n\nID:\n\nNI:\n\nPPE:\n\nRenew:\n\nS&amp;D:\n\nRequest for urgent procedure: Draft amending budget No 1/2020: Assistance to \n\n2.\nGreece in response to increased migration pressure - Immediate measures in the context of \nthe COVID-19 outbreak - Support to post-earthquake reconstruction in Albania - Other \nadjustments (2020/2052(BUD))\n\n16/04/2020 09:30:00.020&#39;, &#39;ID:\n\nNI:\n\nID:\n\nNI:\n\nSinčić\n\n-\n\n0&#39;]
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-141-da844ca83610&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>summary <span class="ansi-blue-fg">=</span> SummaryParser<span class="ansi-blue-fg">(</span>all_texts<span class="ansi-blue-fg">,</span> method<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#39;pdfminer&#39;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> df_summary <span class="ansi-blue-fg">=</span> summary<span class="ansi-blue-fg">.</span>df
+<span class="ansi-green-intense-fg ansi-bold">      3</span> df_summary<span class="ansi-blue-fg">.</span>head<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">150</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">&lt;ipython-input-140-d0ba80dbb9fe&gt;</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, all_texts, method)</span>
+<span class="ansi-green-intense-fg ansi-bold">     20</span> 
+<span class="ansi-green-intense-fg ansi-bold">     21</span>         <span class="ansi-green-fg">if</span> self<span class="ansi-blue-fg">.</span>ix_end <span class="ansi-blue-fg">&gt;</span> self<span class="ansi-blue-fg">.</span>ix_start<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">---&gt; 22</span><span class="ansi-red-fg">             </span>self<span class="ansi-blue-fg">.</span>vote_names<span class="ansi-blue-fg">,</span> self<span class="ansi-blue-fg">.</span>vote_page_numbers <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>parse_names_and_page_numbers<span class="ansi-blue-fg">(</span>summary_text<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     23</span> 
+<span class="ansi-green-intense-fg ansi-bold">     24</span>     <span class="ansi-green-fg">def</span> get_start<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> all_texts<span class="ansi-blue-fg">:</span>typing<span class="ansi-blue-fg">.</span>List<span class="ansi-blue-fg">[</span>str<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">&lt;ipython-input-140-d0ba80dbb9fe&gt;</span> in <span class="ansi-cyan-fg">parse_names_and_page_numbers</span><span class="ansi-blue-fg">(self, all_texts)</span>
+<span class="ansi-green-intense-fg ansi-bold">    106</span>     <span class="ansi-green-fg">def</span> parse_names_and_page_numbers<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> all_texts<span class="ansi-blue-fg">:</span>typing<span class="ansi-blue-fg">.</span>List<span class="ansi-blue-fg">[</span>str<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    107</span> 
+<span class="ansi-green-fg">--&gt; 108</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">return</span> getattr<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">f&#39;{self.method}_parse_names_and_page_numbers&#39;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">(</span>all_texts<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    109</span> 
+<span class="ansi-green-intense-fg ansi-bold">    110</span>     <span class="ansi-green-fg">def</span> get_end<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> all_texts<span class="ansi-blue-fg">:</span>typing<span class="ansi-blue-fg">.</span>List<span class="ansi-blue-fg">[</span>str<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span> summary_text<span class="ansi-blue-fg">:</span>str<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">&lt;ipython-input-140-d0ba80dbb9fe&gt;</span> in <span class="ansi-cyan-fg">pdfminer_parse_names_and_page_numbers</span><span class="ansi-blue-fg">(self, all_texts)</span>
+<span class="ansi-green-intense-fg ansi-bold">     65</span>         <span class="ansi-red-fg">#print(ix_messed_up)</span>
+<span class="ansi-green-intense-fg ansi-bold">     66</span>         print<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">[</span>texts<span class="ansi-blue-fg">[</span>i<span class="ansi-blue-fg">]</span> <span class="ansi-green-fg">for</span> i <span class="ansi-green-fg">in</span> ix_messed_up<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">---&gt; 67</span><span class="ansi-red-fg">         </span>misplaced_numbers <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span>re<span class="ansi-blue-fg">.</span>search<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">r&#39;(\n\n\d\.\n)&#39;</span><span class="ansi-blue-fg">,</span> texts<span class="ansi-blue-fg">[</span>i<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>group<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> i <span class="ansi-green-fg">in</span> ix_messed_up<span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">     68</span>         <span class="ansi-green-fg">for</span> i<span class="ansi-blue-fg">,</span> number <span class="ansi-green-fg">in</span> zip<span class="ansi-blue-fg">(</span>ix_messed_up<span class="ansi-blue-fg">,</span> misplaced_numbers<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">     69</span>             texts<span class="ansi-blue-fg">[</span>i<span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">=</span> re<span class="ansi-blue-fg">.</span>sub<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">r&#39;(\n\n\d\.\n)&#39;</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39; &#39;</span><span class="ansi-blue-fg">,</span> texts<span class="ansi-blue-fg">[</span>i<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">&lt;ipython-input-140-d0ba80dbb9fe&gt;</span> in <span class="ansi-cyan-fg">&lt;listcomp&gt;</span><span class="ansi-blue-fg">(.0)</span>
+<span class="ansi-green-intense-fg ansi-bold">     65</span>         <span class="ansi-red-fg">#print(ix_messed_up)</span>
+<span class="ansi-green-intense-fg ansi-bold">     66</span>         print<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">[</span>texts<span class="ansi-blue-fg">[</span>i<span class="ansi-blue-fg">]</span> <span class="ansi-green-fg">for</span> i <span class="ansi-green-fg">in</span> ix_messed_up<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">---&gt; 67</span><span class="ansi-red-fg">         </span>misplaced_numbers <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span>re<span class="ansi-blue-fg">.</span>search<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">r&#39;(\n\n\d\.\n)&#39;</span><span class="ansi-blue-fg">,</span> texts<span class="ansi-blue-fg">[</span>i<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>group<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> i <span class="ansi-green-fg">in</span> ix_messed_up<span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">     68</span>         <span class="ansi-green-fg">for</span> i<span class="ansi-blue-fg">,</span> number <span class="ansi-green-fg">in</span> zip<span class="ansi-blue-fg">(</span>ix_messed_up<span class="ansi-blue-fg">,</span> misplaced_numbers<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">     69</span>             texts<span class="ansi-blue-fg">[</span>i<span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">=</span> re<span class="ansi-blue-fg">.</span>sub<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">r&#39;(\n\n\d\.\n)&#39;</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39; &#39;</span><span class="ansi-blue-fg">,</span> texts<span class="ansi-blue-fg">[</span>i<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">AttributeError</span>: &#39;NoneType&#39; object has no attribute &#39;group&#39;</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">summary</span> <span class="o">=</span> <span class="n">SummaryParser</span><span class="p">(</span><span class="n">all_texts2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;pypdf2&#39;</span><span class="p">)</span>
+<span class="n">df_summary</span> <span class="o">=</span> <span class="n">summary</span><span class="o">.</span><span class="n">df</span>
+<span class="n">df_summary</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>vote name</th>
+      <th>start page</th>
+      <th>end page</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Request for urgent procedure: Regulation amend...</td>
+      <td>6</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Request for urgent procedure: Draft amending b...</td>
+      <td>8</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Request for urgent procedure: Draft amending b...</td>
+      <td>10</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Request for urgent procedure: Mobilisation of ...</td>
+      <td>12</td>
+      <td>13</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Mobilisation of the Flexibility Instrument for...</td>
+      <td>14</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>113</th>
+      <td>RC-B9-0143/2020 - § 55/1</td>
+      <td>352</td>
+      <td>355</td>
+    </tr>
+    <tr>
+      <th>114</th>
+      <td>RC-B9-0143/2020 - § 55/2</td>
+      <td>356</td>
+      <td>357</td>
+    </tr>
+    <tr>
+      <th>115</th>
+      <td>RC-B9-0143/2020 - am 22</td>
+      <td>358</td>
+      <td>359</td>
+    </tr>
+    <tr>
+      <th>116</th>
+      <td>RC-B9-0143/2020 - recital b</td>
+      <td>360</td>
+      <td>361</td>
+    </tr>
+    <tr>
+      <th>117</th>
+      <td>RC-B9-0143/2020 - am 31</td>
+      <td>362</td>
+      <td>242</td>
+    </tr>
+  </tbody>
+</table>
+<p>118 rows × 3 columns</p>
+</div>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -315,7 +1008,7 @@ nb_path: "nbs/01_parsing_roll_call_votes.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="VotesParser" class="doc_header"><code>class</code> <code>VotesParser</code><a href="https://github.com/eschmidt42/eu_parliament/tree/master/eu_parliament/parse.py#L99" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>VotesParser</code>(<strong><code>start_page</code></strong>:<code>int</code>, <strong><code>end_page</code></strong>:<code>int</code>, <strong><code>all_texts</code></strong>:<code>List</code>[<code>str</code>])</p>
+<h2 id="VotesParser" class="doc_header"><code>class</code> <code>VotesParser</code><a href="https://github.com/eschmidt42/eu_parliament/tree/master/eu_parliament/parse.py#L198" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>VotesParser</code>(<strong><code>start_page</code></strong>:<code>int</code>, <strong><code>end_page</code></strong>:<code>int</code>, <strong><code>all_texts</code></strong>:<code>List</code>[<code>str</code>])</p>
 </blockquote>
 
 </div>
@@ -328,17 +1021,6 @@ nb_path: "nbs/01_parsing_roll_call_votes.ipynb"
 </div>
     {% endraw %}
 
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>TODO:</p>
-<ul>
-<li>Some MEP names seem to disappear when reading the PDF, like Kolakušić, and some are incorrectly read like Ždanoka $\rightarrow$ ”danoka</li>
-<li>the total vote count and the counted names of the actually parsed MEPs disagrees</li>
-</ul>
-
-</div>
-</div>
-</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -402,7 +1084,7 @@ nb_path: "nbs/01_parsing_roll_call_votes.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_all_issues" class="doc_header"><code>get_all_issues</code><a href="https://github.com/eschmidt42/eu_parliament/tree/master/eu_parliament/parse.py#L220" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_all_issues</code>(<strong><code>df_summary</code></strong>:<code>DataFrame</code>, <strong><code>all_texts</code></strong>:<code>List</code>[<code>str</code>])</p>
+<h4 id="get_all_issues" class="doc_header"><code>get_all_issues</code><a href="https://github.com/eschmidt42/eu_parliament/tree/master/eu_parliament/parse.py#L319" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_all_issues</code>(<strong><code>df_summary</code></strong>:<code>DataFrame</code>, <strong><code>all_texts</code></strong>:<code>List</code>[<code>str</code>])</p>
 </blockquote>
 
 </div>
